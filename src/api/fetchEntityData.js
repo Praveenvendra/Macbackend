@@ -9,7 +9,7 @@ export const fetchEntityData = async (artifactId, agentId) => {
         definition: `SELECT * FROM t_6773ba1902796d27852f6714_t WHERE \`entity.artifactId\` = '${artifactId}' AND \`entity.agentId\` = '${agentId}'`
     };
 
-    try {
+    try {  
         const response = await axios.post(
             `${ADHOC}`, 
             queryPayload,
@@ -23,7 +23,14 @@ export const fetchEntityData = async (artifactId, agentId) => {
             entity.siblingIds = JSON.parse(entity.siblingIds || "[]")
             return entity;
         }) || [];
-        console.log(" sources entites" , entities);
+        console.log("entites" , entities);
+
+
+        if (entities.length === 0) {
+            throw new Error(`No entities found for artifactId: ${artifactId} and agentId: ${agentId}`);
+        }
+
+
         return entities;
     } catch (error) {
         console.error("Error fetching entity data:", error);

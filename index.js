@@ -12,7 +12,7 @@ app.use(express.json());
 
 
 console.log('PORT:', process.env.PORT); // Should log 3000
-console.log('API_TOKEN:', process.env.API_TOKEN); 
+// console.log('API_TOKEN:', process.env.API_TOKEN); 
 
 app.get('/', (req, res) => {
     res.send('Hello, World!');

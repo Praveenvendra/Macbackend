@@ -4,6 +4,7 @@ const VALIDATION_RULES = {
     "Cohorts": ["Context", "MLModel", "ModelSuite", "FlowModel", "Visualisation", "Library", "Campaigns", "Engagement", "IngestJob", "Listeners", "Tasks", "Packages", "Experiences", "CMS", "Alliance", "ExperienceProvider", "AccelerationPartner", "SocialMediaGateway", "NativePlatformGateway"],
     "Context": ["BigQuery", "MLModel", "ModelSuite", "FlowModel", "Visualisation", "Library", "Campaigns", "Engagement", "Listeners", "Tasks", "Packages", "Experiences", "CMS", "Alliance", "ExperienceProvider", "AccelerationPartner", "SocialMediaGateway", "NativePlatformGateway"],
     "Entity": ["BigQuery", "MLModel", "ModelSuite", "FlowModel", "Visualisation", "Library", "Campaigns", "Engagement", "Listeners", "Tasks", "Packages", "Experiences", "CMS", "Alliance", "ExperienceProvider", "AccelerationPartner", "SocialMediaGateway", "NativePlatformGateway"],
+    "Schema": ["BigQuery", "MLModel", "ModelSuite", "FlowModel", "Visualisation", "Library", "Campaigns", "Engagement", "Listeners", "Tasks", "Packages", "Experiences", "CMS", "Alliance", "ExperienceProvider", "AccelerationPartner", "SocialMediaGateway", "NativePlatformGateway"],
     "BigQuery": ["MLModel", "ModelSuite", "FlowModel", "Visualisation", "Library", "Campaigns", "Engagement", "Listeners", "Tasks", "Packages", "Experiences", "CMS", "Alliance", "ExperienceProvider", "AccelerationPartner", "SocialMediaGateway", "NativePlatformGateway"],
     "MLModel": ["ModelSuite", "FlowModel", "Visualisation", "Library", "Campaigns", "Engagement", "Listeners", "Tasks", "Packages", "Experiences", "CMS", "Alliance", "ExperienceProvider", "AccelerationPartner", "SocialMediaGateway", "NativePlatformGateway"],
     "ModelSuite": ["FlowModel", "Visualisation", "Library", "Campaigns", "Engagement", "Listeners", "Tasks", "Packages", "Experiences", "CMS", "Alliance", "ExperienceProvider", "AccelerationPartner", "SocialMediaGateway", "NativePlatformGateway"],
@@ -21,25 +22,22 @@ const VALIDATION_RULES = {
     "Alliance": ["MLModel", "ExperienceProvider", "AccelerationPartner"],
     "ExperienceProvider": ["MLModel", "AccelerationPartner"],
     "AccelerationPartner": ["MLModel"]
-  };
+};
   
  
-  export const validateInteraction = (sourceType, destinationType) => {
+export const validateInteraction = (sourceType, destinationType) => {
     const normalizedSourceType = sourceType.toLowerCase();
     const normalizedRules = Object.keys(VALIDATION_RULES).reduce((acc, key) => {
-        acc[key.toLowerCase()] = VALIDATION_RULES[key];
+        acc[key.toLowerCase()] = new Set([...VALIDATION_RULES[key]].map((type) => type.toLowerCase()));
         return acc;
     }, {});
 
-   
     if (!normalizedRules[normalizedSourceType]) {
-        throw new Error(`Invalid source type: "${sourceType}" does not exist in validation rules.`);
+        console.warn(`Warning: Source type "${sourceType}" is not defined in validation rules. Proceeding with interaction.`);
+        return;
     }
 
-    // Check if the destination type is valid for the source type
-    if (normalizedRules[normalizedSourceType].map((type) => type.toLowerCase()).includes(destinationType.toLowerCase())) {
+    if (normalizedRules[normalizedSourceType].has(destinationType.toLowerCase())) {
         throw new Error(`Interaction not possible: Source "${sourceType}" cannot interact with destination "${destinationType}".`);
     }
 };
-
-
