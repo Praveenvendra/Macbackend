@@ -9,3 +9,5 @@ export  const updateEntities = async (sourceEntities, destinationEntities) => {
     destination.childrenIds.push(source.artifactId);
     return [source, destination];
 };
+
+

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADHOC, HEADERS } from "../config/constants.js";
+import { ADHOC, HEADERS,API_ENDPOINT } from "../config/constants.js";
 
 export const fetchEntityData = async (artifactId, agentId) => {
     console.log("Agent ID:", agentId);
@@ -35,5 +35,26 @@ export const fetchEntityData = async (artifactId, agentId) => {
     } catch (error) {
         console.error("Error fetching entity data:", error);
         throw error;
+    }
+};
+
+
+export const fetchArtifactData = async () => {
+    try {
+        // Make the GET request
+        const response = await axios.get(
+            `${API_ENDPOINT}/instances/list?size=100`,
+            { headers: HEADERS() }
+        );
+
+        
+        const { entities } = response.data; 
+
+        // console.log(entities);
+        return entities || [];  
+
+    } catch (error) {
+        console.error("Error fetching entity data:", error.message); // Log error message for clarity
+        throw new Error("Failed to fetch artifact data from the API");
     }
 };

@@ -1,4 +1,4 @@
-export const API_ENDPOINT = 'https://ig.gov-cloud.ai/tf-entity-ingestion/v1.0/schemas/6773ba1902796d27852f6714';
+export const API_ENDPOINT = 'https://ig.gov-cloud.ai/tf-entity-ingestion/v1.0/schemas/677b7e3e2028154e85125b66';
 
 export const ADHOC = 'https://ig.gov-cloud.ai/pi-cohorts-service/v1.0/cohorts/adhoc'
 
